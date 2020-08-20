@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Ship</title>
+    <!-- Material Design Lite -->
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <!-- Material Design icon font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <!-- Uses a transparent header that draws on top of the layout's background -->
+    <div class="demo-layout-transparent mdl-layout mdl-js-layout">
+      <header class="mdl-layout__header mdl-layout__header--transparent">
+        <div class="mdl-layout__header-row  header-bg">
+          <!-- Title -->
+          <span class="mdl-layout-title">Logo</span>
+          <!-- Add spacer, to align navigation to the right -->
+          <div class="mdl-layout-spacer"></div>
+          <!-- Navigation -->
+          <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="/">Home</a>
+            <a class="mdl-navigation__link" href="/createShip.html">Create Ship</a>
+            <a class="mdl-navigation__link" href="/createPort.html">Create Port</a>
+            <a class="mdl-navigation__link" href="/addRoute.html">Add Route</a>
+            <a class="mdl-navigation__link" href="/viewPorts.html">view Ports</a>
+            <a class="mdl-navigation__link" href="/viewRoute.html">view Route</a>
+            <a class="mdl-navigation__link" href="/viewShips.html">view Ships</a>
+          </nav>
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Logo</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="/">Home</a>
+          <a class="mdl-navigation__link" href="/createShip.html">Create Ship</a>
+          <a class="mdl-navigation__link" href="/createPort.html">Create Port</a>
+          <a class="mdl-navigation__link" href="/addRoute.html">Add Route</a>
+          <a class="mdl-navigation__link" href="/viewPorts.html">view Ports</a>
+          <a class="mdl-navigation__link" href="/viewRoute.html">view Route</a>
+          <a class="mdl-navigation__link" href="/viewShips.html">view Ships</a>
+        </nav>
+      </div>
+
+      <!-- Main contents goes here -->
+      <main class="mdl-layout__content">
+        <h1>Create Port</h1>
+        <hr>
+        <form action="" method="POST">
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="name"/>
+            <label class="mdl-textfield__label" for="username">Name Of The Port</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="country"/>
+            <label class="mdl-textfield__label" for="username">Country Of The Port</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="type"/>
+            <label class="mdl-textfield__label" for="username">Type</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="size"/>
+            <label class="mdl-textfield__label" for="username">Size</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="location"/>
+            <label class="mdl-textfield__label" for="username">Location</label>
+          </div>
+          <div >
+            <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+             Save
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="scripts/createPort.js"></script>
+     <script  type="module" src="scripts/shared.js"></script>
+  </body>
+</html>
+     

@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Route</title>
+    <!-- Material Design Lite -->
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <!-- Material Design icon font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <!-- Uses a transparent header that draws on top of the layout's background -->
+    <div class="demo-layout-transparent mdl-layout mdl-js-layout">
+      <header class="mdl-layout__header mdl-layout__header--transparent">
+        <div class="mdl-layout__header-row  header-bg">
+          <!-- Title -->
+          <span class="mdl-layout-title">Logo</span>
+          <!-- Add spacer, to align navigation to the right -->
+          <div class="mdl-layout-spacer"></div>
+          <!-- Navigation -->
+          <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="/">Home</a>
+            <a class="mdl-navigation__link" href="/createShip.html">Create Ship</a>
+            <a class="mdl-navigation__link" href="/createPort.html">Create Port</a>
+            <a class="mdl-navigation__link" href="/addRoute.html">Add Route</a>
+            <a class="mdl-navigation__link" href="/viewPorts.html">view Ports</a>
+            <a class="mdl-navigation__link" href="/viewRoute.html">view Route</a>
+            <a class="mdl-navigation__link" href="/viewShips.html">view Ships</a>
+          </nav>
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Logo</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="/">Home</a>
+          <a class="mdl-navigation__link" href="/createShip.html">Create Ship</a>
+          <a class="mdl-navigation__link" href="/createPort.html">Create Port</a>
+          <a class="mdl-navigation__link" href="/addRoute.html">Add Route</a>
+          <a class="mdl-navigation__link" href="/viewPorts.html">view Ports</a>
+          <a class="mdl-navigation__link" href="/viewRoute.html">view Route</a>
+          <a class="mdl-navigation__link" href="/viewShips.html">view Ships</a>
+        </nav>
+      </div>
+
+      <!-- Main contents goes here -->
+      <main class="mdl-layout__content">
+        <h1>Add Route</h1>
+        <hr>
+        <form action="" method="POST">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <select class="mdl-textfield__input" id="ship" name="ship">
+            </select>
+            <label class="mdl-textfield__label" for="port">Select Ship</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <select class="mdl-textfield__input" id="src_port" name="src_port">
+            </select>
+            <label class="mdl-textfield__label" for="src_port">Source Port</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <select class="mdl-textfield__input" id="des_port" name="des_port">
+            </select>
+            <label class="mdl-textfield__label" for="des_port">Destination Port</label>
+          </div>
+          
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="date" id="date"/>
+          </div>
+          <div >
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+              <i class="material-icons">add</i>
+            </button>
+          </div>
+        </form>
+        <div id="map">
+
+        </div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="scripts/addRoute.js"></script>
+    <script  type="module" src="scripts/shared.js"></script>
+  </body>
+</html>
