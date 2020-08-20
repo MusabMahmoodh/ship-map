@@ -14,7 +14,7 @@ form.addEventListener('submit', function (e) {
     const cost = document.getElementById("cost").value;
 
     let ship = new Ship(name, max_speed, range, description, cost)
-    console.log(ship)
+    // console.log(ship)
     var existingShips = JSON.parse(localStorage.getItem("allShips"));
     if(existingShips == null) existingShips = [];
     existingShips.push(ship);

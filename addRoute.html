@@ -48,12 +48,7 @@
       <main class="mdl-layout__content">
         <h1>Add Route</h1>
         <hr>
-        <form action="" method="POST">
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <select class="mdl-textfield__input" id="ship" name="ship">
-            </select>
-            <label class="mdl-textfield__label" for="port">Select Ship</label>
-          </div>
+        <form action="" method="POST" id="form1">
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <select class="mdl-textfield__input" id="src_port" name="src_port">
             </select>
@@ -64,9 +59,34 @@
             </select>
             <label class="mdl-textfield__label" for="des_port">Destination Port</label>
           </div>
+          <div >
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+              <i class="material-icons">add</i>
+            </button>
+          </div>
+        </form>
+
+
+
+        <form action="" method="POST" id="form2">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <select class="mdl-textfield__input" id="ship" name="ship">
+              <option value=""></option>
+            </select>
+            <label class="mdl-textfield__label" for="port">Select Ship</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="src_port_2" name="src_port_2" readonly>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="des_port_2" name="des_port_2" readonly>
+          </div>
           
           <div class="mdl-textfield mdl-js-textfield">
             <input class="mdl-textfield__input" type="date" id="date"/>
+          </div>
+          <div id="map">
+          <!-- Map will loaded here -->
           </div>
           <div >
             <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
@@ -74,9 +94,7 @@
             </button>
           </div>
         </form>
-        <div id="map">
-          
-        </div>
+        
       </main>
     </div>
 

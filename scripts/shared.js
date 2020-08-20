@@ -9,6 +9,10 @@ export class Ship {
 
       
     }
+
+    set status(x) {
+        this.status = x;
+     }
   }
 
 export class Port {
