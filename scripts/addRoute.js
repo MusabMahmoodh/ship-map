@@ -20,34 +20,43 @@ ships.forEach(ship => {
 });
 ports.forEach(port => {
     const option = document.createElement('option');
-    option.setAttribute('value', 'port.name');
+    option.setAttribute('value', port.name);
     option.innerHTML= port.name 
     srcPortSelect.appendChild(option)
 });
 ports.forEach(port => {
     const option = document.createElement('option');
-    option.setAttribute('value', 'port.name');
+    option.setAttribute('value', port.name);
     option.innerHTML= port.name 
     desPortSelect.appendChild(option)
 });
 
 //Creating the Map
+const form = document.querySelector('form');
 form.addEventListener('submit', function (e) {
     e.preventDefault();
     const srcPortSelectVal = document.getElementById('src_port').value;
     const desPortSelectVal = document.getElementById('des_port').value;
+    // getting long and latittudes
+    var srcPortGeo
+    var desPortGeo
+
+    ports.forEach((port) => {
+        if(port.name == srcPortSelectVal) {
+            srcPortGeo = [port.longitude, port.latitude] 
+        } else if(port.name == desPortSelectVal) {
+            desPortGeo = [port.longitude, port.latitude]
+        }
+    })
+    // console.log(srcPortGeo)
+    // console.log(desPortGeo)
     
+    // Map 
+    const mapDiv = document.getElementById('map');
+    const img = document.createElement('img');
+    img.setAttribute('src', `https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/pin-s-heart+1ea458(${srcPortGeo[0]},${srcPortGeo[1]}),pin-s-heart+fb0909(${desPortGeo[0]},${desPortGeo[1]})/-73.7638,42.6564,0,0/600x300@2x?access_token=pk.eyJ1IjoidGVhbTRtb2JpbGVhcHBzIiwiYSI6ImNrY3hvcXF5dzAyMzkycmxxOTkzaXJmOTYifQ.whkLuHWY1w-RiWgU221rIQ`);
+    mapDiv.appendChild(img);
 
 
   
 });
-// const myLatLng = { lat: -25.363, lng: 131.044 };
-//     const map = new google.maps.Map(document.getElementById("map"), {
-//       zoom: 4,
-//       center: myLatLng
-//     });
-//     new google.maps.Marker({
-//       position: myLatLng,
-//       map,
-//       title: "Hello World!"
-//     });
