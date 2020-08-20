@@ -27,13 +27,20 @@ const shipMaker = (ship) => {
     container.appendChild(ul);
   }
 
-const ships = JSON.parse(localStorage.getItem('allShips'));
-if (ships) {
-    ships.forEach(ship => {
-        console.log(ship)
-        shipMaker(ship);
+
+window.onload = function() {
+    var ships = JSON.parse(localStorage.getItem('allShips'));
+    fetch(`https://eng1003.monash/api/v1/ships/`)
+    .then(response => response.json())
+    .then((data) => {
+        
+        data.ships.forEach((ship) => {
+            ships.push(ship)
+        })
+        ships.forEach(ship => {
+            shipMaker(ship)
+        })
+        
     });
-}
-else {
-    console.log("no data")
+
 }

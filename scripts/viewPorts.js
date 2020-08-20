@@ -24,13 +24,20 @@ const portMaker = (port) => {
     container.appendChild(ul);
   }
 
-const ports = JSON.parse(localStorage.getItem('allPorts'));
-if (ports) {
-    ports.forEach(port => {
-        console.log(port)
-        portMaker(port);
+window.onload = function() {
+    var ports = JSON.parse(localStorage.getItem('allPorts'));
+    fetch(`https://eng1003.monash/api/v1/ports/`)
+    .then(response => response.json())
+    .then((data) => {
+        
+        data.ports.forEach((port) => {
+            ports.push(port)
+        })
+        ports.forEach(port => {
+            portMaker(port)
+        })
+        
     });
+
 }
-else {
-    console.log("no data")
-}
+
