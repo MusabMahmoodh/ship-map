@@ -15,10 +15,10 @@ const portMaker = (port) => {
         ${ port.size }
     </li>
     <li class="li-port-detail">
-        ${ port.latitude }
+        ${ port.lat }
     </li>
     <li class="li-port-detail">
-        ${ port.longitude }
+        ${ port.lng }
     </li>
   `;
     container.appendChild(ul);
