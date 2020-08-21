@@ -4,7 +4,7 @@ const routeMaker = (route) => {
     ul.setAttribute('class', 'ul-route-card');
 
     ul.innerHTML = `
-    ${ route.name }
+    <a href="viewRoute.html?name=${ route.name }">${ route.name }</a>
     <li class="li-route-detail">
         ${ route.distance }
     </li>
@@ -20,7 +20,7 @@ const routeMaker = (route) => {
 
 
 window.onload = function() {
-    
+
     var routes = JSON.parse(localStorage.getItem('allRoutes'));
     routes.forEach(route => {
         routeMaker(route)
