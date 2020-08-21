@@ -26,10 +26,11 @@ export class Port {
 }
 
 export class Route {
-    constructor(name, ship, source_port, distance,time, cost, start_date, way_point_list) {
+    constructor(name, ship, source_port, destination_port, distance,time, cost, start_date, way_point_list) {
         this.name = name;
         this.ship = ship;
         this.source_port = source_port;
+        this.destination_port = destination_port;
         this.distance = distance;
         this.time = time;
         this.cost = cost;

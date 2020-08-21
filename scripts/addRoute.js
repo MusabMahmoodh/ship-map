@@ -210,7 +210,7 @@ window.onload = function(){
         });
 
         //add to route list
-        let route = new Route("no name",selectedShip, srcPortSelectVal,   "not calculated","no time yet", "cost", date, way_points)
+        let route = new Route(`${selectedShip}.${srcPortSelectVal}.${desPortSelectVal} `,selectedShip, srcPortSelectVal, desPortSelectVal, "not calculated","no time yet", "cost", date, way_points)
         var existingRoutes = JSON.parse(localStorage.getItem("allRoutes"));
         if(existingRoutes == null) existingRoutes = [];
         existingRoutes.push(route);
