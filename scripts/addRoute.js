@@ -6,18 +6,8 @@ window.onload = function(){
     
     // load ship and port data
     //from local storage
-    const ships = JSON.parse(localStorage.getItem('allShips'));
     var ports = JSON.parse(localStorage.getItem('allPorts'));
-    //from Apis
-    fetch(`https://eng1003.monash/api/v1/ships/`)
-            .then(response => response.json())
-            .then(data => {
-                data.ships.forEach((ship) => {
-                    ships.push(ship)
-                })
-                
-                
-            });
+
     fetch(`https://eng1003.monash/api/v1/ports/`)
             .then(response => response.json())
             .then((data) => {
@@ -28,17 +18,24 @@ window.onload = function(){
                 createPort()
             });
 
+    //load ship data
+    // from local storage
+    var ships = JSON.parse(localStorage.getItem('allShips'));
+    //from Apis
+    fetch(`https://eng1003.monash/api/v1/ships/`)
+    .then(response => response.json())
+    .then(data => {
+        data.ships.forEach((ship) => {
+            ships.push(ship)
+        })
+        
+        createShip()
+    });
 
 
-    // Creating form
-    var shipSelect = document.getElementById('ship');
-    var srcPortSelect = document.getElementById('src_port');
-    var desPortSelect = document.getElementById('des_port');
 
-
-    //initializing the routes
+    //rendering ports in select options
     function createPort() {
-        console.log(ports)
         //src
         ports.forEach(port => {
             const option = document.createElement('option');
@@ -55,41 +52,126 @@ window.onload = function(){
             document.getElementById('des_port').appendChild(option)
             
         });
-
+      }
+    //rendering ships in ship select option
+    function createShip() {
+      var shipSelect = document.getElementById('ship');
+      ships.forEach(ship => {
+        //check conditions
+        if ( ship.status == "available"){
+            const option = document.createElement('option');
+            option.setAttribute('value', ship.name);
+            option.innerHTML= ship.name 
+            shipSelect.appendChild(option)
+        }
+      });
     }
-
+    //FUnction to generat map
+    function generateMap() {
+      console.log("started")
+      mapboxgl.accessToken = 'pk.eyJ1IjoidGVhbTRtb2JpbGVhcHBzIiwiYSI6ImNrY3hvcXF5dzAyMzkycmxxOTkzaXJmOTYifQ.whkLuHWY1w-RiWgU221rIQ';
+  
+      var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [-96, 37.8],
+        zoom: 3
+      });
+      
+      // code from the next step will go here!
+      var geojson = {
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-77.032, 38.913]
+          },
+          properties: {
+            title: 'Mapbox',
+            description: 'Washington, D.C.'
+          }
+        },
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-122.414, 37.776]
+          },
+          properties: {
+            title: 'Mapbox',
+            description: 'San Francisco, California'
+          }
+        }]
+      };
+      // add markers to map
+      function addMarkers() {
+          geojson.features.forEach(function(marker) {
+      
+          // create a HTML element for each feature
+          var el = document.createElement('div');
+          el.className = 'marker';
+      
+          // make a marker for each feature and add to the map
+          new mapboxgl.Marker(el)
+          .setLngLat(marker.geometry.coordinates)
+          .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+              .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+          .addTo(map);
+          });
+      }
+      addMarkers()
+      // get cordinates
+      map.on('mousedown', function(e) {
+              document.getElementById('info').innerHTML =
+                  // e.point is the x, y coordinates of the mousemove event relative
+                  // to the top-left corner of the map
+                  JSON.stringify(e.point) +
+                  '<br />' +
+                  // e.lngLat is the longitude, latitude geographical position of the event
+                  JSON.stringify(e.lngLat.lng);
+                  console.log(typeof e.lngLat.lng)
+                  geojson.features.push({
+                      type: 'Feature',
+                      geometry: {
+                        type: 'Point',
+                        coordinates: [JSON.stringify(e.lngLat.lng), JSON.stringify(e.lngLat.lat)]
+                      },
+                      properties: {
+                        title: 'Mapbox',
+                        description: 'San Francisco, California'
+                      }
+                    })
+                    addMarkers()
+              
+              })
+      console.log("Ended")
+    }
 
 
 
     //Creating the Map Form
     const form1 = document.getElementById('form1');
     const form2 = document.getElementById('form2');
-
     // Form1 submission
     form1.addEventListener('submit', function (e) {
         e.preventDefault();
         const srcPortSelectVal = document.getElementById('src_port').value;
         const desPortSelectVal = document.getElementById('des_port').value;
-        
+
         // getting long and latittudes
         var srcPortGeo
         var desPortGeo
 
+        //loading selected ports
         ports.forEach((port) => {
-            
             if(port.name == srcPortSelectVal) {
                 srcPortGeo = [port.lng, port.lat] 
-                console.log(port)
             } else if(port.name == desPortSelectVal) {
                 desPortGeo = [port.lng, port.lat]
             }
         })
         
-        // loadnig Map 
-        const mapDiv = document.getElementById('map');
-        const img = document.createElement('img');
-        img.setAttribute('src', `https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/pin-s-heart+1ea458(${srcPortGeo[0]},${srcPortGeo[1]}),pin-s-heart+fb0909(${desPortGeo[0]},${desPortGeo[1]})/-73.7638,42.6564,0,0/600x300@2x?access_token=pk.eyJ1IjoidGVhbTRtb2JpbGVhcHBzIiwiYSI6ImNrY3hvcXF5dzAyMzkycmxxOTkzaXJmOTYifQ.whkLuHWY1w-RiWgU221rIQ`);
-        mapDiv.appendChild(img);
 
         // toggling the form
 
@@ -101,25 +183,17 @@ window.onload = function(){
         srcPortSelectVal_2.value = srcPortSelectVal;
         desPortSelectVal_2.value = desPortSelectVal;
 
-        ships.forEach(ship => {
-            //check conditions
-            if ( ship.status == "available"){
-                const option = document.createElement('option');
-                option.setAttribute('value', ship.name);
-                option.innerHTML= ship.name 
-                shipSelect.appendChild(option)
-            }
-        });
+        createShip()
 
 
-        //show form2
+        //show map
+        generateMap()
     });
 
     // form2 submission
 
     form2.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const srcPortSelectVal = document.getElementById('src_port_2').value;
+        e.preventDefault();       const srcPortSelectVal = document.getElementById('src_port_2').value;
         const desPortSelectVal = document.getElementById('des_port_2').value;
         const selectedShip = document.getElementById('ship').value;
         const date = document.getElementById('date').value;
