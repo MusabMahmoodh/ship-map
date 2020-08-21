@@ -4,6 +4,7 @@ import { Route }  from  './shared.js';
 
 window.onload = function(){
     var geojson = []
+    var distance ;
     
     // load ship and port data
     //from local storage
@@ -207,6 +208,7 @@ window.onload = function(){
       geojson.features.push(linestring);
       
       // Populate the distanceContainer with total distance
+      distance = turf.length(linestring).toLocaleString();
       var value = document.createElement('pre');
       value.textContent =
       'Total distance: ' +
@@ -296,6 +298,7 @@ window.onload = function(){
         const selectedShip = document.getElementById('ship').value;
         const date = document.getElementById('date').value;
         
+        
         //update ship status to 'en-route'
         ships.forEach(ship => {
             
@@ -306,14 +309,14 @@ window.onload = function(){
         
         });
 
-        // //add to route list
-        let route = new Route(`${selectedShip}.${srcPortSelectVal}.${desPortSelectVal} `,selectedShip, srcPortSelectVal, desPortSelectVal, "not calculated","no time yet", "cost", date, way_points)
+        //add to route list
+        let route = new Route(`${selectedShip}.${srcPortSelectVal}.${desPortSelectVal} `,selectedShip, srcPortSelectVal, desPortSelectVal, distance,String(new Date().getTime()), "cost", date, way_points)
         var existingRoutes = JSON.parse(localStorage.getItem("allRoutes"));
         if(existingRoutes == null) existingRoutes = [];
         existingRoutes.push(route);
         console.log(existingRoutes)
         localStorage.setItem("allRoutes", JSON.stringify(existingRoutes)); 
         console.log(existingRoutes)
-        // // window.location.replace("../index.html");  
+        window.location.replace("../index.html");  
     });
 }
