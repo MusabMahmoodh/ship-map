@@ -80,7 +80,7 @@ window.onload = function(){
       
       var distanceContainer = document.getElementById('distance');
       // GeoJSON object to hold our measurement features
-      geojson = {
+      var geojson_markers = {
       'type': 'FeatureCollection',
       'features': [{
           type: 'Feature',
@@ -105,7 +105,7 @@ window.onload = function(){
       };
       // add initial markers to map
       function addMarkers() {
-          geojson.features.forEach(function(marker) {
+          geojson_markers.features.forEach(function(marker) {
   
           // create a HTML element for each feature
           var el = document.createElement('div');
@@ -121,29 +121,67 @@ window.onload = function(){
       }
       // adding markers for starting and ending point
       addMarkers()
-      // Used to draw a line between points
-      var linestring = {
-      'type': 'Feature',
-      'geometry': {
-      'type': 'LineString',
-      'coordinates': [[-122.414, 37.776],[-77.032, 38.913] ]
-      }
-      };
-      
-      map.on('load', function() {
-      map.addSource('geojson', {
-      'type': 'geojson',
-      'data': geojson
-      });
-      
-      // Add styles to the map
-      map.addLayer({
+      // 
+      geojson = {
+            type: 'FeatureCollection',
+            features: [{
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                coordinates: src_port_geo
+                },
+            properties: {
+                title: 'Mapbox',
+                description: 'Washington, D.C.',
+                id:"start"
+                }
+            },
+            {
+            type: 'Feature',
+            geometry: {
+            type: 'Point',
+            coordinates: des_port_geo
+                },
+            properties: {
+            title: 'Mapbox',
+            description: 'San Francisco, California',
+            id:"end"
+                }
+            },
+            {
+            type: 'Feature',
+            geometry: {
+            type: 'LineString',
+            coordinates: [src_port_geo,des_port_geo]
+                }
+            }
+        
+            ]
+        };
+         
+        // Used to draw a line between points
+        var linestring = {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'LineString',
+        'coordinates': []
+        }
+        };
+         
+        map.on('load', function() {
+        map.addSource('geojson', {
+        'type': 'geojson',
+        'data': geojson
+        });
+         
+        // Add styles to the map
+        map.addLayer({
         id: 'measure-points',
         type: 'circle',
         source: 'geojson',
         paint: {
         'circle-radius': 5,
-        'circle-color': 'orange'
+        'circle-color': '#000'
         },
         filter: ['in', '$type', 'Point']
         });
@@ -154,72 +192,72 @@ window.onload = function(){
         layout: {
         'line-cap': 'round',
         'line-join': 'round'
-      },
-      paint: {
+        },
+        paint: {
         'line-color': '#000',
         'line-width': 2.5
         },
         filter: ['in', '$type', 'LineString']
         });
-      
-      map.on('click', function(e) {
-    
-      var features = map.queryRenderedFeatures(e.point, {
-          layers: ['measure-points']//when click add an point layer
-      });
-      
-      // Remove the linestring from the group
-      // So we can redraw it based on the points collection
-      if (geojson.features.length > 1) geojson.features.pop();
-      
-      // Clear the Distance container to populate it with a new value
-      distanceContainer.innerHTML = '';
-      
-      // If a feature was clicked, remove it from the map
-      if (features.length) {
-      var id = features[0].properties.id;
-      geojson.features = geojson.features.filter(function(point) {
-          if(point.properties.id !== 'start' && point.properties.id !== 'end') {
-              return point.properties.id !== id;
-          }
-      });
-      } else {
-      var point = {
-      'type': 'Feature',
-      'geometry': {
-      'type': 'Point',
-      'coordinates': [e.lngLat.lng, e.lngLat.lat]
-      },
-      'properties': {
-      'id': String(new Date().getTime())
-      }
-      };
-      
-      geojson.features.push(point);
-      }
-      
-      if (geojson.features.length > 1) {
-      linestring.geometry.coordinates = geojson.features.map(function(
-      point
-      ) {
-      return point.geometry.coordinates;
-      });
-      
-      geojson.features.push(linestring);
-      
-      // Populate the distanceContainer with total distance
-      distance = turf.length(linestring).toLocaleString();
-      var value = document.createElement('pre');
-      value.textContent =
-      'Total distance: ' +
-      turf.length(linestring).toLocaleString() +
-      'km';
-      distanceContainer.appendChild(value);
-      }
-      
-      map.getSource('geojson').setData(geojson);
-      });
-      });
+         
+        map.on('click', function(e) {
+        var features = map.queryRenderedFeatures(e.point, {
+        layers: ['measure-points']
+        });
+         
+        // Remove the linestring from the group
+        // So we can redraw it based on the points collection
+        if (geojson.features.length > 1) geojson.features.pop();
+        // Clear the Distance container to populate it with a new value
+        distanceContainer.innerHTML = '';
+         
+        // If a feature was clicked, remove it from the map
+        if (features.length) {
+        var id = features[0].properties.id;
+        // Not allow first and last point to be deleted
+        console.log(id)
+        if( id != "start" && id != "end"){
+            geojson.features = geojson.features.filter(function(point) {
+                return point.properties.id !== id;
+                })
+         }
+        } else {
+        var point = {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Point',
+        'coordinates': [e.lngLat.lng, e.lngLat.lat]
+        },
+        'properties': {
+        'id': String(new Date().getTime())
+        }
+        };
+         
+        geojson.features.push(point);
+        }
+         
+        if (geojson.features.length > 1) {
+        linestring.geometry.coordinates = geojson.features.map(function(
+        point
+        ) {
+        return point.geometry.coordinates;
+        });
+         
+        geojson.features.push(linestring);
+         
+        // Populate the distanceContainer with total distance
+        var value = document.createElement('pre');
+        value.textContent =
+        'Total distance: ' +
+        turf.length(linestring).toLocaleString() +
+        'km';
+        distanceContainer.appendChild(value);
+        }
+         
+        map.getSource('geojson').setData(geojson);
+        });
+        });
+         
       
       map.on('mousemove', function(e) {
           // display co-ordinate values
