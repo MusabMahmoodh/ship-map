@@ -3,7 +3,7 @@ import { Route }  from  './shared.js';
 
 
 window.onload = function(){
-    var way_points = []
+    var geojson = []
     
     // load ship and port data
     //from local storage
@@ -79,7 +79,7 @@ window.onload = function(){
       
       var distanceContainer = document.getElementById('distance');
       // GeoJSON object to hold our measurement features
-      var geojson = {
+      geojson = {
       'type': 'FeatureCollection',
       'features': [{
           type: 'Feature',
@@ -290,7 +290,7 @@ window.onload = function(){
     form2.addEventListener('submit', function (e) {
 
         e.preventDefault();       
-        console.log(geojson)
+        let  way_points = geojson.features[geojson.features.length - 1].geometry.coordinates
         const srcPortSelectVal = document.getElementById('src_port_2').value;
         const desPortSelectVal = document.getElementById('des_port_2').value;
         const selectedShip = document.getElementById('ship').value;
@@ -306,13 +306,14 @@ window.onload = function(){
         
         });
 
-        //add to route list
+        // //add to route list
         let route = new Route(`${selectedShip}.${srcPortSelectVal}.${desPortSelectVal} `,selectedShip, srcPortSelectVal, desPortSelectVal, "not calculated","no time yet", "cost", date, way_points)
         var existingRoutes = JSON.parse(localStorage.getItem("allRoutes"));
         if(existingRoutes == null) existingRoutes = [];
         existingRoutes.push(route);
         console.log(existingRoutes)
         localStorage.setItem("allRoutes", JSON.stringify(existingRoutes)); 
+        console.log(existingRoutes)
         // // window.location.replace("../index.html");  
     });
 }
