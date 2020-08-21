@@ -2,7 +2,7 @@ import { Route }  from  './shared.js';
 
 
 window.onload = function(){
-  
+    var way_points = []
     
     // load ship and port data
     //from local storage
@@ -67,8 +67,7 @@ window.onload = function(){
       });
     }
     //FUnction to generat map
-    function generateMap() {
-      console.log("started")
+    function generateMap(src_port_geo, des_port_geo) {
       mapboxgl.accessToken = 'pk.eyJ1IjoidGVhbTRtb2JpbGVhcHBzIiwiYSI6ImNrY3hvcXF5dzAyMzkycmxxOTkzaXJmOTYifQ.whkLuHWY1w-RiWgU221rIQ';
   
       var map = new mapboxgl.Map({
@@ -78,14 +77,14 @@ window.onload = function(){
         zoom: 3
       });
       
-      // code from the next step will go here!
+      // to store co_ordinates
       var geojson = {
         type: 'FeatureCollection',
         features: [{
           type: 'Feature',
           geometry: {
             type: 'Point',
-            coordinates: [-77.032, 38.913]
+            coordinates: src_port_geo
           },
           properties: {
             title: 'Mapbox',
@@ -96,7 +95,7 @@ window.onload = function(){
           type: 'Feature',
           geometry: {
             type: 'Point',
-            coordinates: [-122.414, 37.776]
+            coordinates: des_port_geo
           },
           properties: {
             title: 'Mapbox',
@@ -130,7 +129,7 @@ window.onload = function(){
                   '<br />' +
                   // e.lngLat is the longitude, latitude geographical position of the event
                   JSON.stringify(e.lngLat.lng);
-                  console.log(typeof e.lngLat.lng)
+                  way_points.push([e.lngLat.lng,e.lngLat.lng])
                   geojson.features.push({
                       type: 'Feature',
                       geometry: {
@@ -143,7 +142,6 @@ window.onload = function(){
                       }
                     })
                     addMarkers()
-              
               })
       console.log("Ended")
     }
@@ -187,13 +185,16 @@ window.onload = function(){
 
 
         //show map
-        generateMap()
+        generateMap(srcPortGeo, desPortGeo)
     });
 
     // form2 submission
 
     form2.addEventListener('submit', function (e) {
-        e.preventDefault();       const srcPortSelectVal = document.getElementById('src_port_2').value;
+
+        e.preventDefault();       
+        console.log(way_points)
+        const srcPortSelectVal = document.getElementById('src_port_2').value;
         const desPortSelectVal = document.getElementById('des_port_2').value;
         const selectedShip = document.getElementById('ship').value;
         const date = document.getElementById('date').value;
@@ -209,19 +210,12 @@ window.onload = function(){
         });
 
         //add to route list
-        let route = new Route("no name", desPortSelectVal, srcPortSelectVal, "not calculated","no time yet", "no data", date, "no data")
+        let route = new Route("no name",selectedShip, srcPortSelectVal,   "not calculated","no time yet", "cost", date, way_points)
         var existingRoutes = JSON.parse(localStorage.getItem("allRoutes"));
         if(existingRoutes == null) existingRoutes = [];
         existingRoutes.push(route);
         console.log(existingRoutes)
         localStorage.setItem("allRoutes", JSON.stringify(existingRoutes)); 
-        // window.location.replace("../index.html");  
-
-
-        
-
-
-
-    
+        // // window.location.replace("../index.html");  
     });
 }
