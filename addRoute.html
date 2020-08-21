@@ -10,9 +10,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="css/style.css">
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+    <script defer  src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+    <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
     <!-- Uses a transparent header that draws on top of the layout's background -->
@@ -90,7 +92,8 @@
             <input class="mdl-textfield__input" type="date" id="date"/>
           </div>
           <div class="map-cont">
-            <div id='map'></div>
+            <div id="map"></div>
+            <div id="distance" class="distance-container"></div>
             <pre id="info"></pre>
           </div>
           <div >

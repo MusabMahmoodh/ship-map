@@ -1,6 +1,7 @@
 import { Route }  from  './shared.js';
 
 
+
 window.onload = function(){
     var way_points = []
     
@@ -68,49 +69,47 @@ window.onload = function(){
     }
     //FUnction to generat map
     function generateMap(src_port_geo, des_port_geo) {
-      mapboxgl.accessToken = 'pk.eyJ1IjoidGVhbTRtb2JpbGVhcHBzIiwiYSI6ImNrY3hvcXF5dzAyMzkycmxxOTkzaXJmOTYifQ.whkLuHWY1w-RiWgU221rIQ';
-  
+      mapboxgl.accessToken = 'pk.eyJ1IjoibXVzYWI5ODciLCJhIjoiY2tlMmNvNjgzMDgwYTJzb2I1MmdlMTVkcSJ9.R5WwJb-qcA75bHn7L3gQsA';
       var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/light-v10',
-        center: [-96, 37.8],
-        zoom: 3
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [2.3399, 48.8555],
+      zoom: 3
       });
       
-      // to store co_ordinates
+      var distanceContainer = document.getElementById('distance');
+      // GeoJSON object to hold our measurement features
       var geojson = {
-        type: 'FeatureCollection',
-        features: [{
+      'type': 'FeatureCollection',
+      'features': [{
           type: 'Feature',
           geometry: {
-            type: 'Point',
-            coordinates: src_port_geo
+              type: 'Point',
+              coordinates: src_port_geo
+              },
+              properties: {
+                  'id': "start"
+              }
           },
-          properties: {
-            title: 'Mapbox',
-            description: 'Washington, D.C.'
-          }
-        },
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: des_port_geo
-          },
-          properties: {
-            title: 'Mapbox',
-            description: 'San Francisco, California'
-          }
-        }]
+          {
+              type: 'Feature',
+              geometry: {
+              type: 'Point',
+              coordinates: des_port_geo
+              },
+              properties: {
+                  'id': "end"
+              }
+          }]
       };
-      // add markers to map
+      // add initial markers to map
       function addMarkers() {
           geojson.features.forEach(function(marker) {
-      
+  
           // create a HTML element for each feature
           var el = document.createElement('div');
           el.className = 'marker';
-      
+  
           // make a marker for each feature and add to the map
           new mapboxgl.Marker(el)
           .setLngLat(marker.geometry.coordinates)
@@ -119,31 +118,129 @@ window.onload = function(){
           .addTo(map);
           });
       }
+      // adding markers for starting and ending point
       addMarkers()
-      // get cordinates
-      map.on('mousedown', function(e) {
-              document.getElementById('info').innerHTML =
-                  // e.point is the x, y coordinates of the mousemove event relative
-                  // to the top-left corner of the map
-                  JSON.stringify(e.point) +
-                  '<br />' +
-                  // e.lngLat is the longitude, latitude geographical position of the event
-                  JSON.stringify(e.lngLat.lng);
-                  way_points.push([e.lngLat.lng,e.lngLat.lng])
-                  geojson.features.push({
-                      type: 'Feature',
-                      geometry: {
-                        type: 'Point',
-                        coordinates: [JSON.stringify(e.lngLat.lng), JSON.stringify(e.lngLat.lat)]
-                      },
-                      properties: {
-                        title: 'Mapbox',
-                        description: 'San Francisco, California'
-                      }
-                    })
-                    addMarkers()
-              })
-      console.log("Ended")
+      // Used to draw a line between points
+      var linestring = {
+      'type': 'Feature',
+      'geometry': {
+      'type': 'LineString',
+      'coordinates': [[-122.414, 37.776],[-77.032, 38.913] ]
+      }
+      };
+      
+      map.on('load', function() {
+      map.addSource('geojson', {
+      'type': 'geojson',
+      'data': geojson
+      });
+      
+      // Add styles to the map
+      map.addLayer({
+        id: 'measure-points',
+        type: 'circle',
+        source: 'geojson',
+        paint: {
+        'circle-radius': 5,
+        'circle-color': 'orange'
+        },
+        filter: ['in', '$type', 'Point']
+        });
+        map.addLayer({
+        id: 'measure-lines',
+        type: 'line',
+        source: 'geojson',
+        layout: {
+        'line-cap': 'round',
+        'line-join': 'round'
+      },
+      paint: {
+        'line-color': '#000',
+        'line-width': 2.5
+        },
+        filter: ['in', '$type', 'LineString']
+        });
+      
+      map.on('click', function(e) {
+    
+      var features = map.queryRenderedFeatures(e.point, {
+          layers: ['measure-points']//when click add an point layer
+      });
+      
+      // Remove the linestring from the group
+      // So we can redraw it based on the points collection
+      if (geojson.features.length > 1) geojson.features.pop();
+      
+      // Clear the Distance container to populate it with a new value
+      distanceContainer.innerHTML = '';
+      
+      // If a feature was clicked, remove it from the map
+      if (features.length) {
+      var id = features[0].properties.id;
+      geojson.features = geojson.features.filter(function(point) {
+          if(point.properties.id !== 'start' && point.properties.id !== 'end') {
+              return point.properties.id !== id;
+          }
+      });
+      } else {
+      var point = {
+      'type': 'Feature',
+      'geometry': {
+      'type': 'Point',
+      'coordinates': [e.lngLat.lng, e.lngLat.lat]
+      },
+      'properties': {
+      'id': String(new Date().getTime())
+      }
+      };
+      
+      geojson.features.push(point);
+      }
+      
+      if (geojson.features.length > 1) {
+      linestring.geometry.coordinates = geojson.features.map(function(
+      point
+      ) {
+      return point.geometry.coordinates;
+      });
+      
+      geojson.features.push(linestring);
+      
+      // Populate the distanceContainer with total distance
+      var value = document.createElement('pre');
+      value.textContent =
+      'Total distance: ' +
+      turf.length(linestring).toLocaleString() +
+      'km';
+      distanceContainer.appendChild(value);
+      }
+      
+      map.getSource('geojson').setData(geojson);
+      });
+      });
+      
+      map.on('mousemove', function(e) {
+          // display co-ordinate values
+          document.getElementById('info').innerHTML =
+                      // e.point is the x, y coordinates of the mousemove event relative
+                      // to the top-left corner of the map
+                      JSON.stringify(e.point) +
+                      '<br />' +
+                      // e.lngLat is the longitude, latitude geographical position of the event
+                      JSON.stringify(e.lngLat.lng);
+  
+          
+          var features = map.queryRenderedFeatures(e.point, {
+          layers: ['measure-points']
+          });
+          // UI indicator for clicking/hovering a point on the map
+          map.getCanvas().style.cursor = features.length
+          ? 'pointer'
+          : 'crosshair';
+      });
+      // console.log("Ended")
+
+      
     }
 
 
@@ -193,7 +290,7 @@ window.onload = function(){
     form2.addEventListener('submit', function (e) {
 
         e.preventDefault();       
-        console.log(way_points)
+        console.log(geojson)
         const srcPortSelectVal = document.getElementById('src_port_2').value;
         const desPortSelectVal = document.getElementById('des_port_2').value;
         const selectedShip = document.getElementById('ship').value;
