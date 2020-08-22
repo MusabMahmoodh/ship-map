@@ -221,36 +221,48 @@ window.onload = function(){
                 })
          }
         } else {
-        var point = {
-        'type': 'Feature',
-        'geometry': {
-        'type': 'Point',
-        'coordinates': [e.lngLat.lng, e.lngLat.lat]
-        },
-        'properties': {
-        'id': String(new Date().getTime())
-        }
-        };
-         
-        geojson.features.splice(geojson.features.length-1,0,point);
+            var point = {
+                'type': 'Feature',
+                'geometry': {
+                'type': 'Point',
+                'coordinates': [e.lngLat.lng, e.lngLat.lat]
+                },
+                'properties': {
+                'id': String(new Date().getTime())
+            }
+            };
+            //checking distance between two points
+            //at this point we have removed the linestring(last value from geojson)
+            var from = turf.point(geojson.features[geojson.features.length-2].geometry.coordinates);
+            var to = turf.point(point.geometry.coordinates);
+            var options = {units:'kilometers'};
+            var distance_between_poits = turf.distance(from, to, options);
+            if(distance_between_poits > 100){
+                geojson.features.splice(geojson.features.length-1,0,point);
+            } else {
+                var value = document.createElement('div');
+                value.textContent =
+                'Distance should be greater than 100km';
+                distanceContainer.appendChild(value);
+            }
         }
          // mapping linestring with points 
         if (geojson.features.length > 1) {
-        linestring.geometry.coordinates = geojson.features.map(function(
-        point
-        ) {
-        return point.geometry.coordinates;
-        });
-         
-        geojson.features.push(linestring);
-         
-        // Populate the distanceContainer with total distance
-        var value = document.createElement('pre');
-        value.textContent =
-        'Total distance: ' +
-        turf.length(linestring).toLocaleString() +
-        'km';
-        distanceContainer.appendChild(value);
+            linestring.geometry.coordinates = geojson.features.map(function(
+            point
+            ) {
+            return point.geometry.coordinates;
+            });
+            
+            geojson.features.push(linestring);
+            
+            // Populate the distanceContainer with total distance
+            var value = document.createElement('pre');
+            value.textContent =
+            'Total distance: ' +
+            turf.length(linestring).toLocaleString() +
+            'km';
+            distanceContainer.appendChild(value);
         }
          
         map.getSource('geojson').setData(geojson);
