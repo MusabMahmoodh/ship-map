@@ -264,7 +264,7 @@ window.onload = function(){
             'km';
             distanceContainer.appendChild(value);
         }
-         
+        distance = turf.length(linestring)
         map.getSource('geojson').setData(geojson);
         });
         });
@@ -341,12 +341,11 @@ window.onload = function(){
     form2.addEventListener('submit', function (e) {
 
         e.preventDefault();       
-        let  way_points = geojson.features[geojson.features.length - 1].geometry.coordinates
+        let  way_points = geojson.features[geojson.features.length - 1]
         const srcPortSelectVal = document.getElementById('src_port_2').value;
         const desPortSelectVal = document.getElementById('des_port_2').value;
         const selectedShip = document.getElementById('ship').value;
         const date = document.getElementById('date').value;
-        
         
         //update ship status to 'en-route'
         ships.forEach(ship => {
@@ -360,12 +359,13 @@ window.onload = function(){
 
         //add to route list
         let route = new Route(`${selectedShip}.${srcPortSelectVal}.${desPortSelectVal} `,selectedShip, srcPortSelectVal, desPortSelectVal, distance,String(new Date().getTime()), "cost", date, way_points)
-        var existingRoutes = JSON.parse(localStorage.getItem("allRoutes"));
-        if(existingRoutes == null) existingRoutes = [];
-        existingRoutes.push(route);
-        console.log(existingRoutes)
-        localStorage.setItem("allRoutes", JSON.stringify(existingRoutes)); 
-        console.log(existingRoutes)
-        window.location.replace("../index.html");  
+        console.log(route)
+        // var existingRoutes = JSON.parse(localStorage.getItem("allRoutes"));
+        // if(existingRoutes == null) existingRoutes = [];
+        // existingRoutes.push(route);
+        // console.log(existingRoutes)
+        // localStorage.setItem("allRoutes", JSON.stringify(existingRoutes)); 
+        // console.log(existingRoutes)
+        // window.location.replace("../index.html");  
     });
 }
