@@ -181,7 +181,7 @@ window.onload = function(){
         source: 'geojson',
         paint: {
         'circle-radius': 5,
-        'circle-color': '#000'
+        'circle-color': 'orange'
         },
         filter: ['in', '$type', 'Point']
         });
@@ -215,7 +215,6 @@ window.onload = function(){
         if (features.length) {
         var id = features[0].properties.id;
         // Not allow first and last point to be deleted
-        console.log(id)
         if( id != "start" && id != "end"){
             geojson.features = geojson.features.filter(function(point) {
                 return point.properties.id !== id;
@@ -233,9 +232,9 @@ window.onload = function(){
         }
         };
          
-        geojson.features.push(point);
+        geojson.features.splice(geojson.features.length-1,0,point);
         }
-         
+         // mapping linestring with points 
         if (geojson.features.length > 1) {
         linestring.geometry.coordinates = geojson.features.map(function(
         point
