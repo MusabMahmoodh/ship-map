@@ -349,23 +349,32 @@ window.onload = function(){
         
         //update ship status to 'en-route'
         ships.forEach(ship => {
-            
+            console.log(ship.name)
             if ( ship.name == selectedShip){
-                ship.status = "en-route"
-                localStorage.setItem("allShips", JSON.stringify(ships));
+                //check ship's range
+                if(ship.range > distance) {
+
+                    ship.status = "en-route"
+                    localStorage.setItem("allShips", JSON.stringify(ships));
+                    //add to route list
+                    let route = new Route(`${selectedShip}.${srcPortSelectVal}.${desPortSelectVal} `,selectedShip, srcPortSelectVal, desPortSelectVal, distance,String(new Date().getTime()), "cost", date, way_points)
+                    console.log(route)
+                     
+                } else {
+                    console.log("here")
+                    console.log(ship.range)
+                    console.log(typeof ship.range)
+                    var distanceContainer = document.getElementById('distance');
+                    var value = document.createElement('div');
+                    value.textContent =
+                    "ship's range is less than the distance , please select another one";
+                    distanceContainer.appendChild(value);
+                }
+               
             }
         
         });
 
-        //add to route list
-        let route = new Route(`${selectedShip}.${srcPortSelectVal}.${desPortSelectVal} `,selectedShip, srcPortSelectVal, desPortSelectVal, distance,String(new Date().getTime()), "cost", date, way_points)
-        console.log(route)
-        // var existingRoutes = JSON.parse(localStorage.getItem("allRoutes"));
-        // if(existingRoutes == null) existingRoutes = [];
-        // existingRoutes.push(route);
-        // console.log(existingRoutes)
-        // localStorage.setItem("allRoutes", JSON.stringify(existingRoutes)); 
-        // console.log(existingRoutes)
-        // window.location.replace("../index.html");  
+       
     });
 }

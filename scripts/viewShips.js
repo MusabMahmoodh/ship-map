@@ -9,13 +9,13 @@ const shipMaker = (ship) => {
         ${ ship.name }
     </li>
     <li class="li-ship-detail">
-        ${ ship.max_speed }
+        ${ ship.maxSpeed }
     </li>
     <li class="li-ship-detail">
         ${ ship.range }
     </li>
     <li class="li-ship-detail">
-        ${ ship.description }
+        ${ ship.desc }
     </li>
     <li class="li-ship-detail">
         ${ ship.cost }
@@ -29,7 +29,7 @@ const shipMaker = (ship) => {
 
 
 window.onload = function() {
-    var ships = JSON.parse(localStorage.getItem('allShips'));
+    var ships = JSON.parse(localStorage.getItem('allShips')).ships;
     fetch(`https://eng1003.monash/api/v1/ships/`)
     .then(response => response.json())
     .then((data) => {
@@ -42,5 +42,6 @@ window.onload = function() {
         })
         
     });
+   
 
 }

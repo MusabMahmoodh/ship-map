@@ -1,9 +1,10 @@
+// maximum speed (in knots), range (in km),
 export class Ship {
-    constructor(name, max_speed, range, description, cost) {
+    constructor(name, maxSpeed, range, desc, cost) {
       this.name = name;
-      this.max_speed = max_speed;
+      this.maxSpeed = maxSpeed;
       this.range = range;
-      this.description = description;
+      this.desc = desc;
       this.cost = cost;
       this.status = "available";
 
