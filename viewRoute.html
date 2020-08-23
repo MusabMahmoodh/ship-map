@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
     <!-- Material Design icon font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script defer  src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+    <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
@@ -47,6 +51,9 @@
       <!-- Main contents goes here -->
       <main class="mdl-layout__content">
         <h1>View Route</h1>
+        <div class="map-cont">
+          <div id="map"></div>
+        </div>
       </main>
     </div>
     <script src="scripts/viewRoute.js"></script>

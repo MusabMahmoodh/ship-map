@@ -25,7 +25,7 @@ const portMaker = (port) => {
   }
 
 window.onload = function() {
-    var ports = JSON.parse(localStorage.getItem('allPorts'));
+    var ports = JSON.parse(localStorage.getItem('allPorts')).ports;
     fetch(`https://eng1003.monash/api/v1/ports/`)
     .then(response => response.json())
     .then((data) => {

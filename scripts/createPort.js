@@ -1,6 +1,6 @@
 
 
-import { Port }  from  './shared.js';
+import { Port, PortList }  from  './shared.js';
 
 
 const form = document.querySelector('form');
@@ -25,10 +25,11 @@ form.addEventListener('submit', function (e) {
             lat = data.results[0].geometry.lat;
             lng = data.results[0].geometry.lng;
             let port = new Port(name, country, type, size, lat, lng)
-            console.log(port)
+            let portList = new PortList();
+            // Saving to local storage
             var existingPorts = JSON.parse(localStorage.getItem("allPorts"));
-            if(existingPorts == null) existingPorts = [];
-            existingPorts.push(port);
+            if(existingPorts == null) existingPorts = new PortList();
+            existingPorts.ports.push(port)
             localStorage.setItem("allPorts", JSON.stringify(existingPorts)); 
             window.location.replace("../index.html");  
         });

@@ -1,4 +1,4 @@
-import { Route }  from  './shared.js';
+import { Route,RouteList }  from  './shared.js';
 
 
 
@@ -8,7 +8,7 @@ window.onload = function(){
     
     // load ship and port data
     //from local storage
-    var ports = JSON.parse(localStorage.getItem('allPorts'));
+    var ports = JSON.parse(localStorage.getItem('allPorts')).ports;
 
     fetch(`https://eng1003.monash/api/v1/ports/`)
             .then(response => response.json())
@@ -22,7 +22,7 @@ window.onload = function(){
 
     //load ship data
     // from local storage
-    var ships = JSON.parse(localStorage.getItem('allShips'));
+    var ships = JSON.parse(localStorage.getItem('allShips')).ships;
     //from Apis
     fetch(`https://eng1003.monash/api/v1/ships/`)
     .then(response => response.json())
@@ -341,24 +341,43 @@ window.onload = function(){
     form2.addEventListener('submit', function (e) {
 
         e.preventDefault();       
-        let  way_points = geojson.features[geojson.features.length - 1]
+        let  way_points = geojson
         const srcPortSelectVal = document.getElementById('src_port_2').value;
         const desPortSelectVal = document.getElementById('des_port_2').value;
         const selectedShip = document.getElementById('ship').value;
         const date = document.getElementById('date').value;
         
+
+        //Calculating cost
+        
         //update ship status to 'en-route'
         ships.forEach(ship => {
-            console.log(ship.name)
+            
             if ( ship.name == selectedShip){
                 //check ship's range
                 if(ship.range > distance) {
+                    //calculate cost
+                    var cost =  distance*ship.cost
+                    //calculate time
+                    var time = distance/(ship.maxSpeed*1.852)
+                    
 
+
+                    // change status to en-route
                     ship.status = "en-route"
-                    localStorage.setItem("allShips", JSON.stringify(ships));
+                    
+                    
+                    
                     //add to route list
-                    let route = new Route(`${selectedShip}.${srcPortSelectVal}.${desPortSelectVal} `,selectedShip, srcPortSelectVal, desPortSelectVal, distance,String(new Date().getTime()), "cost", date, way_points)
+                    let route = new Route(`${selectedShip}.${srcPortSelectVal}.${desPortSelectVal}`,selectedShip, srcPortSelectVal, desPortSelectVal, distance,time, cost, date, way_points)
                     console.log(route)
+                    var existingRoutes = JSON.parse(localStorage.getItem("allRoutes"));
+                    if(existingRoutes == null) existingRoutes = new RouteList();
+                    existingRoutes.routes.push(route)
+                    console.log(route)
+                    console.log(existingRoutes)
+                    localStorage.setItem("allRoutes", JSON.stringify(existingRoutes)); 
+                    window.location.replace("../index.html");  
                      
                 } else {
                     console.log("here")
