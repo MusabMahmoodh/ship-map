@@ -1,4 +1,4 @@
-import { Route,RouteList }  from  './shared.js';
+import { Route,RouteList,ShipList }  from  './shared.js';
 
 
 
@@ -22,7 +22,9 @@ window.onload = function(){
 
     //load ship data
     // from local storage
-    var ships = JSON.parse(localStorage.getItem('allShips')).ships;
+    var ships_local = JSON.parse(localStorage.getItem('allShips')).ships;
+    var ships = []
+    ships.push(...ships_local)
     //from Apis
     fetch(`https://eng1003.monash/api/v1/ships/`)
     .then(response => response.json())
@@ -365,17 +367,17 @@ window.onload = function(){
 
                     // change status to en-route
                     ship.status = "en-route"
-                    
+                    let newShipList = new ShipList()
+                    newShipList.ships = ships_local
+                    localStorage.setItem("allShips", JSON.stringify(newShipList)); 
                     
                     
                     //add to route list
                     let route = new Route(`${selectedShip}.${srcPortSelectVal}.${desPortSelectVal}`,selectedShip, srcPortSelectVal, desPortSelectVal, distance,time, cost, date, way_points)
-                    console.log(route)
                     var existingRoutes = JSON.parse(localStorage.getItem("allRoutes"));
                     if(existingRoutes == null) existingRoutes = new RouteList();
                     existingRoutes.routes.push(route)
-                    console.log(route)
-                    console.log(existingRoutes)
+
                     localStorage.setItem("allRoutes", JSON.stringify(existingRoutes)); 
                     window.location.replace("../index.html");  
                      

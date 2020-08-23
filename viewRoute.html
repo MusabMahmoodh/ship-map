@@ -51,11 +51,46 @@
       <!-- Main contents goes here -->
       <main class="mdl-layout__content">
         <h1>View Route</h1>
-        <div class="map-cont">
-          <div id="map"></div>
-        </div>
+        <form action="" method="POST" id="form3">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <label for="">Ship</label>
+            <input class="mdl-textfield__input" type="text"  id="ship" name="ship" readonly >
+            
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <label for="">Source port</label>
+            <input class="mdl-textfield__input" type="text" id="src_port_2" name="src_port_2" readonly>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <label for="">Destination port</label>
+            <input class="mdl-textfield__input" type="text" id="des_port_2" name="des_port_2" readonly>
+          </div>
+          
+          <div class="mdl-textfield mdl-js-textfield">
+            <label for="">Date</label>
+            <input class="mdl-textfield__input" type="date" id="date"/>
+          </div>
+          <div class="map-cont">
+            <div id="map"></div>
+          </div>
+          <div >
+            Update Date
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+              
+              <i class="material-icons">update</i>
+            </button>
+          </div>
+          <div>
+            <a href="index.html">Back</a>
+          </div>
+        </form>
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" id="btn_del">
+          <i class="material-icons">delete</i>
+        </button>
       </main>
     </div>
-    <script src="scripts/viewRoute.js"></script>
+    <script defer type="module" src="scripts/viewRoute.js"></script>
+    <script  type="module" src="scripts/shared.js"></script>
   </body>
 </html>
+

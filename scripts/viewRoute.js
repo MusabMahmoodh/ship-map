@@ -1,3 +1,4 @@
+import { RouteList }  from  './shared.js';
 
 
 window.onload = function() {
@@ -12,6 +13,11 @@ window.onload = function() {
     });
 
     way_points=route.way_point_list
+    //settings
+    document.getElementById('src_port_2').value = route.source_port;
+    document.getElementById('des_port_2').value =route.destination_port;
+    document.getElementById('ship').value =route.ship ;
+    document.getElementById('date').value = route.start_date ;
 
 
     generateMap(way_points)
@@ -24,7 +30,7 @@ window.onload = function() {
         zoom: 3
         });
         // 
-        geojson = way_points
+        var geojson = way_points
            
         // Used to draw a line between points
         var linestring = {
@@ -48,7 +54,7 @@ window.onload = function() {
         source: 'geojson',
         paint: {
         'circle-radius': 5,
-        'circle-color': 'orange'
+        'circle-color': '#711'
         },
         filter: ['in', '$type', 'Point']
         });
@@ -71,5 +77,17 @@ window.onload = function() {
   
         
       }
+
+    const btn_del = document.getElementById('btn_del')
+    console.log(routes)
+    btn_del.addEventListener('click', function(e){
+        routes = routes.filter((x) => x != route)
+        console.log(routes)
+       
+        let newRouteList = new RouteList()
+        newRouteList.routes = routes
+        localStorage.setItem("allRoutes", JSON.stringify(newRouteList)); 
+        window.location.replace("../index.html"); 
+    })
 
 }
