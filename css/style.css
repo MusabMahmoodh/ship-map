@@ -46,12 +46,21 @@ body {
     border-radius: 3px;
 }
 
-.marker {
-/* background-image: url('mapbox-icon.png'); */
-    background-size: cover;
-    width: 10px;
-    height: 10px;
-    background-color: #222;
+.end-marker {
+
+    
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.start-marker {
+
+   
+    width: 20px;
+    height: 20px;
+    background-color: green;
     border-radius: 50%;
     cursor: pointer;
 }

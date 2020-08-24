@@ -25,11 +25,20 @@ const portMaker = (port) => {
   }
 
 window.onload = function() {
-    var ports = JSON.parse(localStorage.getItem('allPorts')).ports;
+    var ports;
+    //get from local storage
+    var ports_obj = JSON.parse(localStorage.getItem('allPorts'));
+    //if port list is not in local storage, create an empty array
+    if(ports_obj == null) {
+        ports= []
+    } else {
+        ports = ports_obj.ports;
+    }
+    //fetch data from port  API
     fetch(`https://eng1003.monash/api/v1/ports/`)
     .then(response => response.json())
     .then((data) => {
-        
+        //push to ports array
         data.ports.forEach((port) => {
             ports.push(port)
         })

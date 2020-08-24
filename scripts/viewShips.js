@@ -6,22 +6,22 @@ const shipMaker = (ship) => {
     ul.innerHTML = `
     ${ ship.name }
     <li class="li-ship-detail">
-        ${ ship.name }
+        Ship name: ${ ship.name }
     </li>
     <li class="li-ship-detail">
-        ${ ship.maxSpeed }
+        Max_speed: ${ ship.maxSpeed }
     </li>
     <li class="li-ship-detail">
-        ${ ship.range }
+        Range :${ ship.range }
     </li>
     <li class="li-ship-detail">
-        ${ ship.desc }
+        Description: ${ ship.desc }
     </li>
     <li class="li-ship-detail">
-        ${ ship.cost }
+        Cost per Km: ${ ship.cost }
     </li>
     <li class="li-ship-detail">
-        ${ ship.status }
+        Status: ${ ship.status }
     </li>
   `;
     container.appendChild(ul);
@@ -29,7 +29,16 @@ const shipMaker = (ship) => {
 
 
 window.onload = function() {
-    var ships = JSON.parse(localStorage.getItem('allShips')).ships;
+    var ships;
+    //get from local storage
+    var ships_obj = JSON.parse(localStorage.getItem('allShips'));
+    //if ship list is not in local storage, create an empty array
+    if(ships_obj == null) {
+        ships= []
+    } else {
+        ships = JSON.parse(localStorage.getItem('allShips')).ships;
+    }
+    //get from A
     fetch(`https://eng1003.monash/api/v1/ships/`)
     .then(response => response.json())
     .then((data) => {

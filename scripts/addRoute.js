@@ -58,11 +58,16 @@ window.onload = function(){
         });
       }
     //rendering ships in ship select option
-    function createShip() {
+    function createShip(srcPortGeo,desPortGeo) {
+        var from = turf.point(srcPortGeo);
+        var to = turf.point(desPortGeo);
+        var options = {units:'kilometers'};
+        var distance_between_poits = turf.distance(from, to, options);
+        
       var shipSelect = document.getElementById('ship');
       ships.forEach(ship => {
         //check conditions
-        if ( ship.status == "available"){
+        if ( ship.status == "available" && distance_between_poits <= ship.range ){
             const option = document.createElement('option');
             option.setAttribute('value', ship.name);
             option.innerHTML= ship.name 
@@ -76,7 +81,7 @@ window.onload = function(){
       var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [2.3399, 48.8555],
+      center: src_port_geo,
       zoom: 3
       });
       
@@ -111,6 +116,11 @@ window.onload = function(){
   
           // create a HTML element for each feature
           var el = document.createElement('div');
+          if(marker.properties.id.trim().localeCompare("end")) {
+              el.setAttribute("class", "end-marker");
+          } else {
+            el.setAttribute("class", "start-marker");
+          }
           el.className = 'marker';
   
           // make a marker for each feature and add to the map
@@ -331,7 +341,7 @@ window.onload = function(){
         srcPortSelectVal_2.value = srcPortSelectVal;
         desPortSelectVal_2.value = desPortSelectVal;
 
-        createShip()
+        createShip(srcPortGeo,desPortGeo)
 
 
         //show map

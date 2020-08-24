@@ -12,7 +12,7 @@ window.onload = function() {
         
     });
 
-    way_points=route.way_point_list
+    way_points = route.way_point_list
     //settings
     document.getElementById('src_port_2').value = route.source_port;
     document.getElementById('des_port_2').value =route.destination_port;
@@ -53,8 +53,8 @@ window.onload = function() {
         type: 'circle',
         source: 'geojson',
         paint: {
-        'circle-radius': 5,
-        'circle-color': '#711'
+        'circle-radius': 6,
+        'circle-color': '#c11'
         },
         filter: ['in', '$type', 'Point']
         });
@@ -79,15 +79,27 @@ window.onload = function() {
       }
 
     const btn_del = document.getElementById('btn_del')
-    console.log(routes)
     btn_del.addEventListener('click', function(e){
         routes = routes.filter((x) => x != route)
-        console.log(routes)
-       
         let newRouteList = new RouteList()
         newRouteList.routes = routes
         localStorage.setItem("allRoutes", JSON.stringify(newRouteList)); 
         window.location.replace("../index.html"); 
     })
+
+    // Updating the date
+    const btn_update_date = document.getElementById('btn-update-date')
+    btn_update_date.addEventListener('click', function(e){
+        const new_date =document.getElementById('date').value
+        route.start_date = new_date
+        let newRouteList = new RouteList()
+        newRouteList.routes = routes
+        console.log(newRouteList)
+        localStorage.setItem("allRoutes", JSON.stringify(newRouteList)); 
+        alert("Date postponed successfully")
+        window.location.replace("../index.html"); 
+
+
+    })    
 
 }
